@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { FaRegCalendar } from "react-icons/fa6"
 export default function Profile() {
   return (
     <div id="wd-profile-screen">
@@ -13,13 +12,6 @@ export default function Profile() {
       <div className="input-group" >
         <input id="wd-dob" value="2000-01-01" type="date" className="form-control mb-2"
           style={{ borderTopRightRadius: "0.3rem", borderBottomRightRadius: "0.3rem" }} />
-        <FaRegCalendar
-          style={{
-            position: "absolute",
-            right: "10px",
-            top: "20%",
-            zIndex: 10, 
-          }} />
       </div>
 
       <input id="wd-email" value="alice@wonderland" type="email" className="form-control mb-2" />
