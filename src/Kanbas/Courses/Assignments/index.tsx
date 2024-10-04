@@ -110,8 +110,8 @@ export default function Assignments() {
                   <strong>A2</strong>
                 </a>
                 <div style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
-                  <span style={{ color: "rgb(225, 5, 5)" }}>Multiple Modules</span> | Not available until May 6 at 12:00 am |
-                  <br /> Due May 13 at 11:59pm | 100 pts
+                  <span style={{ color: "rgb(225, 5, 5)" }}>Multiple Modules</span> | Not available until May 13 at 12:00 am |
+                  <br /> Due May 20 at 11:59pm | 100 pts
                 </div>
               </div>
             </div>
@@ -138,8 +138,8 @@ export default function Assignments() {
                   <strong>A3</strong>
                 </a>
                 <div style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
-                  <span style={{ color: "rgb(225, 5, 5)" }}>Multiple Modules</span> | Not available until May 6 at 12:00 am |
-                  <br /> Due May 13 at 11:59pm | 100 pts
+                  <span style={{ color: "rgb(225, 5, 5)" }}>Multiple Modules</span> | Not available until May 20 at 12:00 am |
+                  <br /> Due May 27 at 11:59pm | 100 pts
                 </div>
               </div>
             </div>
