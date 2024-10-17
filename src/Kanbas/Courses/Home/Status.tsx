@@ -10,7 +10,7 @@ import { FaRegBell } from "react-icons/fa6";
 
 export default function CourseStatus() {
   return (
-    <div id="wd-course-status" style={{ width: "300px" }}>
+    <div id="wd-course-status" style={{ width: "300px" }} className="d-none d-lg-block">
       <h2>Course Status</h2>
 
       <div className="d-flex">

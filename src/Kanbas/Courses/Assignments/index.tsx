@@ -5,9 +5,13 @@ import { PiNotePencilDuotone } from "react-icons/pi";
 import { RxTriangleDown } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
 import { IoEllipsisVertical } from 'react-icons/io5';
+import { Link, useParams } from "react-router-dom";
+import * as db from "../../Database";
 
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments;
   return (
     <div id="wd-assignments">
 
@@ -54,7 +58,7 @@ export default function Assignments() {
 
       <ul className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
 
-        <li className="wd-title p-3 ps-2 bg-secondary d-flex align-items-center">
+        <li className="wd-title p-3 ps-2 bg-secondary d-flex align-items-center" style={{ border: "0.5px solid black" }}>
           <BsGripVertical className="me-2 fs-3 align-items-center"
             style={{ marginLeft: "5px" }} />
           <RxTriangleDown className="me-2 fs-3 align-items-center" />
@@ -70,17 +74,20 @@ export default function Assignments() {
 
         <ul id="wd-assignment-list" className="p-0 m-0 list-group rounded-0">
 
-          <li className="wd-assignment-list-item list-group-item p-3 ps-2 d-flex justify-content-between align-items-start">
+        {assignments.filter((assignment: any) => assignment.course === cid)
+          .map((assignment: any) =>(
+          <li key = {assignment._id}
+          className="wd-assignment-list-item list-group-item p-3 ps-2 d-flex justify-content-between align-items-start">
             <div className="d-flex align-items-start">
               <BsGripVertical className="me-2 fs-3 align-self-center" />
               <PiNotePencilDuotone className="me-2 fs-3 align-self-center" style={{ color: "green" }} />
 
               <div className="d-flex flex-column me-2">
-                <a className="wd-assignment-link d-flex align-items-center"
-                  href="#/Kanbas/Courses/1234/Assignments/123"
+                <Link className="wd-assignment-link d-flex align-items-center"
+                  to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
                   style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
-                  <strong>A1</strong>
-                </a>
+                  <strong>{assignment.title}</strong>
+                </Link>
                 <div style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
                   <span style={{ color: "rgb(225, 5, 5)" }}>Multiple Modules</span> | Not available until May 6 at 12:00 am |
                   <br /> Due May 13 at 11:59pm | 100 pts
@@ -95,68 +102,10 @@ export default function Assignments() {
               <IoEllipsisVertical className="fs-4 align-self-center" />
             </div>
           </li>
-
-
-
-          <li className="wd-assignment-list-item list-group-item p-3 ps-2 d-flex justify-content-between align-items-start">
-            <div className="d-flex align-items-start">
-              <BsGripVertical className="me-2 fs-3 align-self-center" />
-              <PiNotePencilDuotone className="me-2 fs-3 align-self-center" style={{ color: "green" }} />
-
-              <div className="d-flex flex-column me-2">
-                <a className="wd-assignment-link d-flex align-items-center"
-                  href="#/Kanbas/Courses/1234/Assignments/123"
-                  style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
-                  <strong>A2</strong>
-                </a>
-                <div style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
-                  <span style={{ color: "rgb(225, 5, 5)" }}>Multiple Modules</span> | Not available until May 13 at 12:00 am |
-                  <br /> Due May 20 at 11:59pm | 100 pts
-                </div>
-              </div>
-            </div>
-
-            <div className="d-flex align-items-center" style={{ paddingTop: "2.5%" }}>
-              <span className="d-flex align-items-center me-2">
-                <GreenCheckmark />
-              </span>
-              <IoEllipsisVertical className="fs-4 align-self-center" />
-            </div>
-          </li>
-
-
-
-          <li className="wd-assignment-list-item list-group-item p-3 ps-2 d-flex justify-content-between align-items-start">
-            <div className="d-flex align-items-start">
-              <BsGripVertical className="me-2 fs-3 align-self-center" />
-              <PiNotePencilDuotone className="me-2 fs-3 align-self-center" style={{ color: "green" }} />
-
-              <div className="d-flex flex-column me-2">
-                <a className="wd-assignment-link d-flex align-items-center"
-                  href="#/Kanbas/Courses/1234/Assignments/123"
-                  style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
-                  <strong>A3</strong>
-                </a>
-                <div style={{ color: "inherit", textDecoration: "none", paddingLeft: "20px" }}>
-                  <span style={{ color: "rgb(225, 5, 5)" }}>Multiple Modules</span> | Not available until May 20 at 12:00 am |
-                  <br /> Due May 27 at 11:59pm | 100 pts
-                </div>
-              </div>
-            </div>
-
-            <div className="d-flex align-items-center" style={{ paddingTop: "2.5%" }}>
-              <span className="d-flex align-items-center me-2">
-                <GreenCheckmark />
-              </span>
-              <IoEllipsisVertical className="fs-4 align-self-center" />
-            </div>
-          </li>
+          ))}
 
         </ul>
       </ul>
-
-
-
 
     </div>
   );
