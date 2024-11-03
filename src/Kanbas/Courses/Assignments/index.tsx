@@ -4,14 +4,39 @@ import { CiSearch } from "react-icons/ci";
 import { PiNotePencilDuotone } from "react-icons/pi";
 import { RxTriangleDown } from "react-icons/rx";
 import { FaPlus } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa";
 import { IoEllipsisVertical } from 'react-icons/io5';
 import { Link, useParams } from "react-router-dom";
 import * as db from "../../Database";
-
+import ProtectedContent from "../ProtectedContent";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  upsertAssignment,
+  deleteAssignment,
+} from "./reducer";
+import { useNavigate } from "react-router-dom";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments;
+  const {assignments} = useSelector((state:any) => state.assignmentsReducer)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [newAssignmentTitle, setNewAssignmentTitle] = useState('');
+  
+  const handleAddAssignment = () => {
+    navigate(`/Kanbas/Courses/${cid}/Assignments/new`);
+  };
+
+  const handleDeleteAssignment = (assignmentId: string | number) => {
+    const confirmDelete = window.confirm("Are you sure you want to remove this assignment?");
+    if (confirmDelete) {
+      dispatch(deleteAssignment(assignmentId));
+    }
+  };
+  
+
   return (
     <div id="wd-assignments">
 
@@ -43,15 +68,18 @@ export default function Assignments() {
             </span>
           </div>
 
-
+          <ProtectedContent allowedRole="FACULTY">
           <div className="d-flex ms-auto">
             <button id="wd-add-assignment-group" className="btn btn-secondary d-flex align-items-center ms-2">
               <FaPlus className="me-1" /> Group
             </button>
-            <button id="wd-add-assignment" className="btn btn-primary-red d-flex align-items-center ms-2">
+            <button id="wd-add-assignment" className="btn btn-primary-red d-flex align-items-center ms-2"
+              onClick={handleAddAssignment}>
               <FaPlus className="me-1" /> Assignment
             </button>
           </div>
+          </ProtectedContent>
+
         </div>
       </div>
 
@@ -96,6 +124,10 @@ export default function Assignments() {
             </div>
 
             <div className="d-flex align-items-center" style={{ paddingTop: "2.5%" }}>
+            <ProtectedContent allowedRole="FACULTY">
+            <FaTrash className="text-danger me-2 mb-1"  
+            onClick={() => handleDeleteAssignment(assignment._id)}/>
+            </ProtectedContent>
               <span className="d-flex align-items-center me-2">
                 <GreenCheckmark />
               </span>

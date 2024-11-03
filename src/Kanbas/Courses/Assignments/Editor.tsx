@@ -1,10 +1,57 @@
-import { Link, useParams } from "react-router-dom";
-import * as db from "../../Database";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { upsertAssignment } from "./reducer";
+import ProtectedContent from "../ProtectedContent";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const assignments = db.assignments;
-  const assignment = assignments.find((assignment) => assignment._id === aid);
+  const {assignments} = useSelector((state:any) => state.assignmentsReducer)
+  const assignment = assignments.find((assignment: any) => assignment._id === aid) || {
+    _id: "", 
+    title: "",
+    description: "",
+    points: 100,
+    group: "",
+    submissionType: "",
+    assignTo: "",
+    dueDate: "",
+    availableFrom: "",
+    availableUntil: "",
+    course: cid, 
+  };
+  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // Local state to manage the form inputs
+  const [title, setTitle] = useState(assignment ? assignment.title : "");
+  const [description, setDescription] = useState(assignment.description);
+  const [points, setPoints] = useState(assignment.points);
+  const [group, setGroup] = useState("ASSIGNMENTS");
+  const [submissionType, setSubmissionType] = useState("Online");
+  const [assignTo, setAssignTo] = useState("Everyone");
+  const [dueDate, setDueDate] = useState(assignment.dueDate);
+  const [availableFrom, setAvailableFrom] = useState(assignment.availableFrom);
+  const [availableUntil, setAvailableUntil] = useState(assignment.availableUntil);
+
+  const handleSave = () => {
+    const modifiedAssignment = {
+      _id: assignment?._id || `${Date.now()}`, 
+      title,
+      description,
+      points,
+      group,
+      submissionType,
+      assignTo,
+      dueDate,
+      availableFrom,
+      availableUntil,
+      course: cid, 
+    };
+    dispatch(upsertAssignment(modifiedAssignment));
+    navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  };
+
 
     return (
     <div id="wd-assignments-editor">
@@ -13,20 +60,13 @@ export default function AssignmentEditor() {
         Assignment Name</label>
       <div className="row mt-4">
         <input id="wd-name" 
-        value={assignment ? assignment.title : ""} 
+        value={title} onChange={(e) => setTitle(e.target.value)} 
         className="form-control" />
       </div>
 
       <div className="row mt-4">
-        <textarea id="wd-description" className="col-sm-2 col-form-label">
-          {`The assignment is available online.
-          Submit a link to the landing page of your Web application running onNetlify.
-          The landing page should include the following:
-            *   Your full name and section
-            *   Links to each of the lab assignments
-            *   Link to the Kanbas application
-            *   Links to all relevant source code repositories
-          The Kanbas application should include a link to navigate back to the landing page.`}
+        <textarea id="wd-description" className="col-sm-2 col-form-label"
+        value={description} onChange={(e) => setDescription(e.target.value)}>
         </textarea>
       </div>
 
@@ -34,7 +74,8 @@ export default function AssignmentEditor() {
       <div className="row mt-4 justify-content-end">
         <label htmlFor="wd-points" className="col-sm-4 col-form-label text-end">Points</label>
         <div className="col-sm-6 d-flex justify-content-end">
-          <input id="wd-points" className="form-control" value={100} style={{ width: "100%" }} />
+          <input id="wd-points" className="form-control" value={points} 
+          onChange={(e) => setPoints(Number(e.target.value))}/>
         </div>
       </div>
 
@@ -43,8 +84,8 @@ export default function AssignmentEditor() {
           Assignment Group</label>
         <div className="col-sm-6 d-flex justify-content-end">
           <select id="wd-group" className="form-select">
-            <option value="ASSIGNMENTS">ASSIGNMENTS</option>
-            <option value="LABS">LABS</option>
+            <option defaultValue="ASSIGNMENTS">ASSIGNMENTS</option>
+            <option defaultValue="LABS">LABS</option>
           </select>
         </div>
       </div>
@@ -55,7 +96,7 @@ export default function AssignmentEditor() {
           Display Grade as</label>
         <div className="col-sm-6 d-flex justify-content-end">
           <select id="wd-display-grade-as" className="form-select">
-            <option value="Percentage">Percentage</option>
+            <option defaultValue="Percentage">Percentage</option>
           </select>
         </div>
       </div>
@@ -69,7 +110,7 @@ export default function AssignmentEditor() {
           <div className="d-flex flex-column form-control">
             <div className="d-flex justify-content-end">
               <select id="wd-submission-type" className="form-select">
-                <option value="Online">Online</option>
+                <option defaultValue="Online">Online</option>
               </select>
             </div>
 
@@ -122,25 +163,28 @@ export default function AssignmentEditor() {
             <label htmlFor="wd-assign-to" className="mt-4" style={{ fontWeight: 'bold' }}>
               Assign to
             </label>
-            <input id="wd-assign-to" className="form-control mt-2" value="Everyone" />
+            <input id="wd-assign-to" className="form-control mt-2" defaultValue="Everyone" />
 
             <label htmlFor="wd-due-date" className="mt-4" style={{ fontWeight: 'bold' }}>
               Due
             </label>
-            <input type="date" id="wd-due-date" className="form-control mt-2" value="2024-05-13" />
+            <input type="date" id="wd-due-date" className="form-control mt-2" 
+            value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
 
             <div className="row">
               <div className="col-sm-6">
                 <label htmlFor="wd-available-from" className="mt-4" style={{ fontWeight: 'bold' }}>
                   Available from
                 </label>
-                <input type="date" id="wd-available-from" className="form-control mt-2" value="2024-05-06" />
+                <input type="date" id="wd-available-from" className="form-control mt-2" 
+                value={availableFrom} onChange={(e) => setAvailableFrom(e.target.value)} />
               </div>
               <div className="col-sm-6">
                 <label htmlFor="wd-available-until" className="mt-4" style={{ fontWeight: 'bold' }}>
                   Until
                 </label>
-                <input type="date" id="wd-available-until" className="form-control mt-2" value="2024-05-20" />
+                <input type="date" id="wd-available-until" className="form-control mt-2" 
+                value={availableUntil} onChange={(e) => setAvailableUntil(e.target.value)} />
               </div>
             </div>
 
@@ -148,17 +192,17 @@ export default function AssignmentEditor() {
         </div>
       </div>
 
-
+      <ProtectedContent allowedRole="FACULTY">
       <div className="row mt-4 justify-content-end">
         <div className="col-sm-6 d-flex justify-content-end">
           <Link to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-secondary me-2">
             Cancel
           </Link>
-          <Link to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-primary">
-            Save
-          </Link>
+          <button onClick={handleSave} className="btn btn-primary">
+            Save</button>
         </div>
       </div>
+      </ProtectedContent>
 
 
     </div>
