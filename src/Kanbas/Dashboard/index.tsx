@@ -25,7 +25,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
       (enrollment: any) => enrollment.user === currentUser._id && enrollment.course === courseId
     );
   // Filter courses based on showAllCourses state
-  const filteredCourses = showAllCourses
+  {/* const filteredCourses = showAllCourses
     ? courses
     : courses.filter((course) =>
       enrollments.some(
@@ -33,7 +33,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
           enrollment.user === currentUser._id &&
           enrollment.course === course._id
       )
-    );
+    );*/}
 
   return (
     <div id="wd-dashboard">
@@ -74,13 +74,11 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                 enrollment.course === course._id
             )).map((course) => (
             */}
-          {filteredCourses.map((course) => {
- 
-            return (
+          {courses.map((course) => (
               
               <div key={course._id} className="wd-dashboard-course col" style={{ width: "300px" }}>
                 <div className="card rounded-3 overflow-hidden">
-                
+
                   <Link to={isEnrolled(course._id) ? `/Kanbas/Courses/${course._id}/Home` : "#"}
                     className="wd-dashboard-course-link text-decoration-none text-dark" >
                     <img src={`/images/${course._id}.png`}
@@ -140,8 +138,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                   </Link>
                 </div>
               </div>
-            );
-          })}
+            ))}
 
         </div>
       </div>
