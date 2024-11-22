@@ -7,15 +7,17 @@ import { FaPlus } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { IoEllipsisVertical } from 'react-icons/io5';
 import { Link, useParams } from "react-router-dom";
-import * as db from "../../Database";
 import ProtectedContent from "../ProtectedContent";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  setAssignments,
   upsertAssignment,
   deleteAssignment,
 } from "./reducer";
 import { useNavigate } from "react-router-dom";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function Assignments() {
   const { cid } = useParams();
@@ -23,23 +25,40 @@ export default function Assignments() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [newAssignmentTitle, setNewAssignmentTitle] = useState('');
-  
+    useEffect(() => {
+      if (cid) {
+        fetchAssignments();
+      }
+    }, [cid]); 
+    
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.getAllAssignments(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+ 
   const handleAddAssignment = () => {
     navigate(`/Kanbas/Courses/${cid}/Assignments/new`);
   };
 
-  const handleDeleteAssignment = (assignmentId: string | number) => {
+  const handleDeleteAssignment = async (assignmentId: any) => {
     const confirmDelete = window.confirm("Are you sure you want to remove this assignment?");
     if (confirmDelete) {
-      dispatch(deleteAssignment(assignmentId));
+      try {
+        await assignmentsClient.deleteAssignment(assignmentId);
+        fetchAssignments();  // Re-fetch assignments after deletion to update the state
+      } catch (error) {
+        console.error("Error deleting assignment:", error);
+      }
     }
   };
-  
+
+  console.log("in index:",assignments);
+    
+
 
   return (
     <div id="wd-assignments">
-
+      
       <div className="input-group mb-3">
         <div className="d-flex justify-content-between w-100">
           <div className="d-flex">
