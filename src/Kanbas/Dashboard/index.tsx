@@ -50,6 +50,7 @@ export default function Dashboard({
             enrollment.user === currentUser._id &&
             enrollment.course === course._id
         ));
+        console.log("enrolledCourses: ", enrolledCourses);
       setAllCourses(enrolledCourses);
     } else {
       setAllCourses(fetchedCourses);
@@ -62,7 +63,7 @@ export default function Dashboard({
 
   useEffect(() => {
     preloadCourses();
-  }, [enrollments, showEnrolledOnly]);
+  }, [enrollments, showEnrolledOnly, courses]);
 
   const handleToggleEnrollments = async () => {
     setShowEnrolledOnly((prev) => !prev);
