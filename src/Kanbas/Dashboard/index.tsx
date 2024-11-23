@@ -130,7 +130,6 @@ export default function Dashboard({
               style={{ width: "300px" }}
             >
               <div className="card rounded-3 overflow-hidden">
-                
                 <Link
                   to={enrollments.some(
                     (enrollment: any) =>
@@ -138,7 +137,6 @@ export default function Dashboard({
                       enrollment.course === course._id)
                     ? `/Kanbas/Courses/${course._id}/Home`
                     : `/Kanbas/Dashboard`}
-
                   className="wd-dashboard-course-link text-decoration-none text-dark"
                 >
                   <img
