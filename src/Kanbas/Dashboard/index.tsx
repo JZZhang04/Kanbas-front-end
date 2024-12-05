@@ -50,21 +50,18 @@ export default function Dashboard({
   const preloadCourses = async () => {
     const fetchedCourses = await fetchAllCourses();
     // if (showEnrolledOnly) {
-    //   const enrolledCourses = Array.isArray(enrollments)
-    //     ? fetchedCourses.filter((course: any) =>
-    //         Array.isArray(enrollments) && enrollments.some(
-    //           (enrollment: any) =>
-    //             enrollment.user === currentUser._id &&
-    //             enrollment.course === course._id
-    //         )
-    //       )
-    //     : []; // Default to an empty array if enrollments is not ready
+    //   const enrolledCourses = fetchedCourses.filter((course: any) =>
+    //     Array.isArray(enrollments) && enrollments.some(
+    //       (enrollment: any) =>
+    //         enrollment.user === currentUser._id &&
+    //         enrollment.course === course._id
+    //     ));
+    //   console.log("enrolledCourses: ", enrolledCourses);
     //   setAllCourses(enrolledCourses);
     // } else {
       setAllCourses(fetchedCourses);
     // }
   };
-  
 
   useEffect(() => {
     preloadEnrollments();
@@ -145,12 +142,13 @@ export default function Dashboard({
             >
               <div className="card rounded-3 overflow-hidden">
                 <Link
-                  to={ Array.isArray(enrollments) &&enrollments.some(
-                    (enrollment: any) =>
-                      enrollment.user === currentUser._id &&
-                      enrollment.course === course._id)
-                    ? `/Kanbas/Courses/${course._id}/Home`
-                    : `/Kanbas/Dashboard`}
+                  // to={Array.isArray(enrollments) && enrollments.some(
+                  //   (enrollment: any) =>
+                  //     enrollment.user === currentUser._id &&
+                  //     enrollment.course === course._id)
+                  //   ? `/Kanbas/Courses/${course._id}/Home`
+                  //   : `/Kanbas/Dashboard`}
+                    to = {`/Kanbas/Courses/${course._id}/Home`}
                   className="wd-dashboard-course-link text-decoration-none text-dark"
                 >
                   <img
@@ -184,7 +182,7 @@ export default function Dashboard({
                     </p>
 
                     <ProtectedContent allowedRole="STUDENT">
-                      { Array.isArray(enrollments) && enrollments.some(
+                      {Array.isArray(enrollments) && enrollments.some(
                         (enrollment: any) =>
                           enrollment.user === currentUser._id &&
                           enrollment.course === course._id

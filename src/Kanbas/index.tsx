@@ -20,7 +20,7 @@ export default function Kanbas() {
   const [enrolling, setEnrolling] = useState<boolean>(false);
 
   const findCoursesForUser = async () => {
-    console.log("id for current user: " + currentUser._id);
+    console.log("uesr id for current user: " + currentUser._id);
     try {
       const courses = await userClient.findCoursesForUser(currentUser._id);
       setCourses(courses);
